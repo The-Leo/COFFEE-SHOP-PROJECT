@@ -1,4 +1,5 @@
 import os
+import sys
 from flask import Flask, request, jsonify, abort
 from sqlalchemy import exc
 import json
@@ -83,21 +84,20 @@ def get_drink_detail(payload):
 '''
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
-def add_drink(payload):
+def add_drink(jwt):
     body = request.get_json()
+    print(body)
 
 # New Data
     new_title = body.get('title', None)
     new_recipe = body.get('recipe', None)
+    print(new_title)
+    print(new_recipe)
 
     try: 
         drink = Drink(title=new_title, recipe=json.dumps(new_recipe))
-        print(drink)
         # insert drink into database
         drink.insert()
-
-        selection = Drink.query.order_by(Drink.id).all()
-        drink = (request, selection)
 
         return jsonify({'success': True,
                         'drinks': [drink.long()],
@@ -121,19 +121,29 @@ def add_drink(payload):
 
 @app.route('/drinks/<int:drink_id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
-def update_drink(payload, drink_id):
-    drink = Drink.query.filter(Drink.id == drink_id).one_or_none()
-    if drink is None:
-        abort(404)
+def update_drink(payload, id):
+    
     body = request.get_json()
-    add_recipe = body.get('recipe', None)
     try:
-        drink.recipe = json.dumps(add_recipe)
+
+        drink = Drink.query.filter(Drink.id == id).one_or_none()
+        if drink is None:
+            abort(404)
+        
+        if 'title' in body:
+            drink.title = body.get('title')
+
+        if 'recipe' in body:
+            drink.recipe = json.dumps(body.get('recipe'))
+
         drink.update()
-        return jsonify({'success': True,
-                        'drinks': [drink.long()],
-                        }), 200
-    except BaseException:
+
+        return jsonify({
+            'success': True,
+            'drinks': [drink.long()]
+                            })
+    except:
+        print(sys.exc_info())
         abort(422)
 
 
