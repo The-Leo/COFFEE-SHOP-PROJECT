@@ -21,6 +21,7 @@ pip install -r requirements.txt
 ```
 
 This will install all of the required packages we selected within the `requirements.txt` file.
+Some of the dependencies were deprecated, so i updated the requirements.txt file appropriately. 
 
 ##### Key Dependencies
 
@@ -52,26 +53,26 @@ The `--reload` flag will detect file changes and restart the server automaticall
 
 ### Setup Auth0
 
-1. Create a new Auth0 Account
-2. Select a unique tenant domain
-3. Create a new, single page web application
-4. Create a new API
+1. Create a new Auth0 Account (DONE)
+2. Select a unique tenant domain (DONE)
+3. Create a new, single page web application (DONE)
+4. Create a new API (ALL DONE)
    - in API Settings:
      - Enable RBAC
      - Enable Add Permissions in the Access Token
-5. Create new API permissions:
+5. Create new API permissions: (DONE)
    - `get:drinks`
    - `get:drinks-detail`
    - `post:drinks`
    - `patch:drinks`
    - `delete:drinks`
-6. Create new roles for:
+6. Create new roles for: (DONE)
    - Barista
      - can `get:drinks-detail`
      - can `get:drinks`
    - Manager
      - can perform all actions
-7. Test your endpoints with [Postman](https://getpostman.com).
+7. Test your endpoints with [Postman](https://getpostman.com). (ALL DONE)
    - Register 2 users - assign the Barista role to one and Manager role to the other.
    - Sign into each account and make note of the JWT.
    - Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`
@@ -85,3 +86,7 @@ There are `@TODO` comments throughout the `./backend/src`. We recommend tackling
 
 1. `./src/auth/auth.py`
 2. `./src/api.py`
+
+The appropriate endpoints were written on api.py
+auth.py was also properly configured to get token auth header and to check permissions. 
+auth.py was also configured to implement token verification. 
