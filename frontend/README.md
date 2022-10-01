@@ -12,7 +12,7 @@ This project depends on Nodejs and Node Package Manager (NPM). Before continuing
 
 #### Installing Ionic Cli
 
-The Ionic Command Line Interface is required to serve and build the frontend. Instructions for installing the CLI is in the [Ionic Framework Docs](https://ionicframework.com/docs/installation/cli).
+The Ionic Command Line Interface is required to serve and build the frontend. Instructions for installing the CLI is in the [Ionic Framework Docs]().https://ionicframework.com/docs/installation/cli
 
 #### Installing project dependencies
 
@@ -54,3 +54,11 @@ The authentication system used for this project is Auth0. `./src/app/services/au
 ### Authorization
 
 The Auth0 JWT includes claims for permissions based on the user's role within the Auth0 system. This project makes use of these claims using the `auth.can(permission)` method which checks if particular permissions exist within the JWT permissions claim of the currently logged in user. This method is defined in  `./src/app/services/auth.service.ts` and is then used to enable and disable buttons in `./src/app/pages/drink-menu/drink-form/drink-form.html`.
+
+
+
+I realised there was some permissions error in my operating system. So I installed node version manager by running: $ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash , then I installed the latest LTS release of NodeJS by running $ nvm install --lts , then I set the newly installed NodeJS as my default environment by running $ nvm alias default lts/*
+After this I could peacefully uninstall ionic and reinstall it by running:
+$ npm uninstall -g ionic
+$ npm install -g @ionic/cli
+
