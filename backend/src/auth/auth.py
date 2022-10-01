@@ -1,5 +1,5 @@
 import json
-from flask import request, _request_ctx_stack
+from flask import request,abort, _request_ctx_stack
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
@@ -19,20 +19,16 @@ class AuthError(Exception):
         self.error = error
         self.status_code = status_code
 
-
 ## Auth Header
 
 '''
-@TODO implement get_token_auth_header() method
+@TODO implement get_token_auth_header() method (DONE)
     it should attempt to get the header from the request
         it should raise an AuthError if no header is present
     it should attempt to split bearer and the token
         it should raise an AuthError if the header is malformed
     return the token part of the header
 '''
-
-# def get_token_auth_header():
-#    raise Exception('Not Implemented')
 
 def get_token_auth_header():
     """Obtains the Access Token from the Authorization Header
@@ -70,7 +66,7 @@ def get_token_auth_header():
 
 
 '''
-@TODO implement check_permissions(permission, payload) method
+@TODO implement check_permissions(permission, payload) method (DONE)
     @INPUTS
         permission: string permission (i.e. 'post:drink')
         payload: decoded jwt payload
@@ -99,7 +95,7 @@ def check_permissions(permission, payload):
     return True
 
 '''
-@TODO implement verify_decode_jwt(token) method
+@TODO implement verify_decode_jwt(token) method (DONE)
     @INPUTS
         token: a json web token (string)
 
@@ -169,7 +165,7 @@ def verify_decode_jwt(token):
 
 
 '''
-@TODO implement @requires_auth(permission) decorator method
+@TODO implement @requires_auth(permission) decorator method (DONE)
     @INPUTS
         permission: string permission (i.e. 'post:drink')
 
@@ -182,9 +178,18 @@ def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            token = get_token_auth_header()
-            payload = verify_decode_jwt(token)
-            check_permissions(permission, payload)
+            try: 
+                token = get_token_auth_header()
+            except Exception:
+                abort(401)
+            try:
+                payload = verify_decode_jwt(token)
+            except Exception:
+                abort(403)
+            try:
+                check_permissions(permission, payload)
+            except Exception:
+                abort(403)
             return f(payload, *args, **kwargs)
 
         return wrapper
